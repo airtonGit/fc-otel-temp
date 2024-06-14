@@ -1,0 +1,27 @@
+
+services:
+  service-a:
+    image: ghcr.io/airtongit/fc-otel-temp:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - net1
+
+  service-b:
+    image: ghcr.io/airtongit/fc-temp-by-cep:latest
+    ports:
+      - "9090:9090"
+    environment:
+      - WEATHER="955781466c1e414e9e9181300240806"
+      - PORT="9090"
+    networks:
+      - net1
+
+networks:
+  net1:
+    driver: bridge

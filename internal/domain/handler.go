@@ -22,4 +22,9 @@ func RequestTempByCEP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if request.CEP == "" {
+		http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
+		return
+	}
+
 }

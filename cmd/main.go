@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/airtongit/fc-otel-temp/internal/domain"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/airtongit/fc-otel-temp/internal/domain"
 	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 )
