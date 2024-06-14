@@ -20,7 +20,7 @@ COPY . ./
 # RUN echo "Go gcflags: ${SKAFFOLD_GO_GCFLAGS}"
 # RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -v -o /app
 
-RUN go build -v -o /app/temp-cep cmd/main.go
+RUN go build -v -o /app/otel-temp cmd/main.go
 
 # Now create separate deployment image
 FROM scratch
@@ -33,4 +33,4 @@ ENV GOTRACEBACK=single
 # Copy template & assets
 WORKDIR /app
 COPY --from=build /app ./app
-ENTRYPOINT ["./app/temp-cep"]
+ENTRYPOINT ["./app/otel-temp"]
