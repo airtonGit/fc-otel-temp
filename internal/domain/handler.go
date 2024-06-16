@@ -2,6 +2,7 @@ package domain
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"go.opentelemetry.io/otel"
@@ -27,6 +28,8 @@ func MakeRequestTempByCEPHandler(tempByCEPService TempByCEPService) http.Handler
 			http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
 			return
 		}
+
+		log.Println("request handling cep:", request.CEP)
 
 		carrier := propagation.HeaderCarrier(req.Header)
 		ctx := req.Context()

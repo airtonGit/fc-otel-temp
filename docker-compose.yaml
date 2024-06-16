@@ -38,7 +38,8 @@ services:
       - prometheus
 
   service-a:
-    image: ghcr.io/airtongit/fc-otel-temp:latest
+    container_name: temp-otel
+    #image: ghcr.io/airtongit/fc-otel-temp:latest
     build:
       context: .
       dockerfile: ./Dockerfile
