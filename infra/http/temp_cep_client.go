@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"net/http"
 )
 
@@ -9,11 +10,12 @@ type HTTPClient interface {
 }
 
 type TempByCEPClient interface {
-	GetTempByCEP(cep string) (float64, error)
+	DoRequest(ctx context.Context, cep string) (float64, error)
 }
 
 type tempByCEPClient struct {
-	client HTTPClient
+	client  HTTPClient
+	enpoint string
 }
 
 func NewTempByCEPClient(client HTTPClient) *tempByCEPClient {
@@ -23,7 +25,7 @@ func NewTempByCEPClient(client HTTPClient) *tempByCEPClient {
 	}
 }
 
-func (c *tempByCEPClient) GetTempByCEP(cep string) (float64, error) {
+func (c *tempByCEPClient) DoRequest(ctx context.Context, cep string) (float64, error) {
 
 	return 0, nil
 }
