@@ -65,14 +65,41 @@ func initProvider(serviceName, collectorURL string) (func(context.Context) error
 	return tracerProvider.Shutdown, nil
 }
 
+type config struct {
+	OtelServiceName      string
+	OtelExporterEndpoing string
+}
+
+func loadConfig() (config, error) {
+
+	viper.AutomaticEnv()
+
+	cfg := config{
+		OtelServiceName:      viper.GetString("OTEL_SERVICE_NAME"),
+		OtelExporterEndpoing: viper.GetString("OTEL_EXPORTER_OTLP_ENDPOINT"),
+	}
+
+	if cfg.OtelServiceName == "" {
+		return config{}, fmt.Errorf("otel service name empty")
+	}
+
+	if cfg.OtelExporterEndpoing == "" {
+		return config{}, fmt.Errorf("otel endpoint empty")
+	}
+	return cfg, nil
+}
+
 func main() {
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-
-	shutdown, err := initProvider(viper.GetString("OTEL_SERVICE_NAME"), viper.GetString("OTEL_EXPORTER_OTLP_ENDPOINT"))
+	cfg, err := loadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	shutdown, err := initProvider(cfg.OtelServiceName, cfg.OtelExporterEndpoing)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,7 +110,7 @@ func main() {
 	}()
 
 	tracer := otel.Tracer("temp-by-cep-otel-tracer")
-	tempbyCEPClient := infrahttp.NewTempByCEPClient(http.DefaultClient)
+	tempbyCEPClient := infrahttp.NewTempByCEPClient(http.DefaultClient, "localhost:7070")
 	tempByCEPService := domain.NewTempByCEPService(tempbyCEPClient, tracer)
 
 	r := chi.NewRouter()

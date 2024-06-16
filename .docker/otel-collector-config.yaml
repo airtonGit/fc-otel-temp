@@ -4,15 +4,15 @@ receivers:
       grpc:
 
 exporters:
-  prometheus:
-    endpoint: "0.0.0.0:8889"
+#  prometheus:
+#    endpoint: "0.0.0.0:8889"
 
   logging:
 
-  otlp:
-    endpoint: jaeger-all-in-one:4317
-    tls:
-      insecure: true
+#  otlp:
+#    endpoint: jaeger-all-in-one:4317
+#    tls:
+#      insecure: true
 
 processors:
   batch:

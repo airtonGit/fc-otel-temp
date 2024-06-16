@@ -10,8 +10,8 @@ services:
 #    restart: always
 #    ports:
 #      - "16686:16686"
-#      - "14268"
-#      - "14250"
+#      - "14268" # thrift_http ????
+#      - "14250" # grpc ???
 
   otel-collector:
     container_name: collector
@@ -25,6 +25,7 @@ services:
       - "8889:8889"   # Prometheus exporter metrics
       - "55679:55679" # webview for traces
       - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP http receiver
 
   service-a:
     container_name: temp-otel
@@ -34,14 +35,23 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "8080:8080"
+    environment:
+      - "OTEL_SERVICE_NAME=service-a"
+      - "OTEL_EXPORTER_OTLP_ENDPOINT=localhost:4317"
+      - "PORT=8080"
 #    networks:
 #      - net1
 
   service-b:
+    container_name: service-b
     image: ghcr.io/airtongit/fc-temp-by-cep:latest
+    depends_on:
+      - otel-collector
     ports:
       - "7070:7070"
     environment:
+      - "OTEL_SERVICE_NAME=service-b"
+      - "OTEL_EXPORTER_OTLP_ENDPOINT=localhost:4317"
       - "WEATHER=955781466c1e414e9e9181300240806"
       - "PORT=7070"
 #    networks:

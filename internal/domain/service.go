@@ -2,16 +2,16 @@ package domain
 
 import (
 	"context"
+	"github.com/airtongit/fc-otel-temp/infra/http"
 	"go.opentelemetry.io/otel/trace"
-	"time"
 )
 
 type CEPByTempClient interface {
-	DoRequest(ctx context.Context, cep string) (float64, error)
+	DoRequest(ctx context.Context, cep string) (http.TempByCEPResponse, error)
 }
 
 type TempByCEPService interface {
-	GetTempByCEP(ctx context.Context, cep string) (float64, error)
+	GetTempByCEP(ctx context.Context, cep string) (http.TempByCEPResponse, error)
 }
 
 type tempByCEPService struct {
@@ -26,10 +26,9 @@ func NewTempByCEPService(cepByTempClient CEPByTempClient, tracer trace.Tracer) *
 	}
 }
 
-func (s *tempByCEPService) GetTempByCEP(ctx context.Context, cep string) (float64, error) {
+func (s *tempByCEPService) GetTempByCEP(ctx context.Context, cep string) (http.TempByCEPResponse, error) {
 
 	ctx, spanInicial := s.OTELTracer.Start(ctx, "SPAN_INICIAL_GetTempByCEP_Service")
-	time.Sleep(time.Second)
 	spanInicial.End()
 
 	ctx, span := s.OTELTracer.Start(ctx, "Chama externa")
