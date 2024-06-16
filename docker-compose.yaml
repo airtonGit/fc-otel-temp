@@ -29,7 +29,7 @@ services:
 
   service-a:
     container_name: temp-otel
-    #image: ghcr.io/airtongit/fc-otel-temp:latest
+    image: ghcr.io/airtongit/fc-otel-temp:latest
     depends_on:
       - otel-collector
     build:

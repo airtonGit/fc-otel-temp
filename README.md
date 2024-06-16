@@ -8,3 +8,7 @@ curl -X POST --location "http://localhost:8080/cep" \
 \"cep\": \"88955000\"
 }"
 ```
+
+## Zipkin 
+
+http://localhost:9411/zipkin/
