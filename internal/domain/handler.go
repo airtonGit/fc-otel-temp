@@ -35,8 +35,6 @@ func MakeRequestTempByCEPHandler(tempByCEPService TempByCEPService) http.Handler
 		ctx := req.Context()
 		ctx = otel.GetTextMapPropagator().Extract(ctx, carrier)
 
-		otel.GetTextMapPropagator().Inject(ctx, propagation.HeaderCarrier(req.Header))
-
 		temp, err := tempByCEPService.GetTempByCEP(ctx, request.CEP)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

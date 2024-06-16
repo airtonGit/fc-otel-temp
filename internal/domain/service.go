@@ -28,10 +28,7 @@ func NewTempByCEPService(cepByTempClient CEPByTempClient, tracer trace.Tracer) *
 
 func (s *tempByCEPService) GetTempByCEP(ctx context.Context, cep string) (http.TempByCEPResponse, error) {
 
-	ctx, spanInicial := s.OTELTracer.Start(ctx, "SPAN_INICIAL_GetTempByCEP_Service")
-	spanInicial.End()
-
-	ctx, span := s.OTELTracer.Start(ctx, "Chama externa")
+	ctx, span := s.OTELTracer.Start(ctx, "Chama service-b")
 	defer span.End()
 
 	return s.cepByTempClient.DoRequest(ctx, cep)

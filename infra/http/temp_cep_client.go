@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 	"net/http"
 )
 
@@ -42,6 +44,8 @@ func (c *tempByCEPClient) DoRequest(ctx context.Context, cep string) (TempByCEPR
 	if err != nil {
 		return TempByCEPResponse{}, fmt.Errorf("fail make request err=%w", err)
 	}
+
+	otel.GetTextMapPropagator().Inject(ctx, propagation.HeaderCarrier(req.Header))
 
 	resp, err := c.client.Do(req)
 	if err != nil {
