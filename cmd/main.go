@@ -41,10 +41,10 @@ func initProvider(serviceName, collectorURL string) (func(context.Context) error
 	defer cancel()
 	conn, err := grpc.DialContext(ctx, collectorURL,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		//grpc.WithBlock(),
+		grpc.WithBlock(),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create gRPC connection to collector: %w", err)
+		return nil, fmt.Errorf("failed to create gRPC connection url %s to collector: %w", collectorURL, err)
 	}
 
 	traceExporter, err := otlptracegrpc.New(ctx, otlptracegrpc.WithGRPCConn(conn))
@@ -110,7 +110,7 @@ func main() {
 	}()
 
 	tracer := otel.Tracer("temp-by-cep-otel-tracer")
-	tempbyCEPClient := infrahttp.NewTempByCEPClient(http.DefaultClient, "localhost:7070")
+	tempbyCEPClient := infrahttp.NewTempByCEPClient(http.DefaultClient, "service-b:7070")
 	tempByCEPService := domain.NewTempByCEPService(tempbyCEPClient, tracer)
 
 	r := chi.NewRouter()
