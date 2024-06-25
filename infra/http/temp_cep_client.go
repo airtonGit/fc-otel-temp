@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
+	"io"
+	"log"
 	"net/http"
 )
 
@@ -18,6 +20,7 @@ type TempByCEPResponse struct {
 	TempF      float64 `json:"temp_F,omitempty"`
 	TempK      float64 `json:"temp_K,omitempty"`
 	Localidade string  `json:"localidade"`
+	StatusCode int
 }
 
 type TempByCEPClient interface {
@@ -50,6 +53,15 @@ func (c *tempByCEPClient) DoRequest(ctx context.Context, cep string) (TempByCEPR
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return TempByCEPResponse{}, fmt.Errorf("fail request err=%w", err)
+	}
+
+	if resp.StatusCode > 201 {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return TempByCEPResponse{}, err
+		}
+		log.Println("do_request response statuscode:", resp.StatusCode, "body", string(body))
+		return TempByCEPResponse{StatusCode: resp.StatusCode}, nil
 	}
 
 	var localTempResp TempByCEPResponse

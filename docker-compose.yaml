@@ -46,7 +46,7 @@ services:
 
   service-b:
     container_name: service-b
-    image: ghcr.io/airtongit/fc-temp-by-cep:latest
+    #image: ghcr.io/airtongit/fc-temp-by-cep:latest
     build:
       context: .
       dockerfile: ../fc-temp-by-cep/Dockerfile
