@@ -44,10 +44,10 @@ func MakeRequestTempByCEPHandler(tempByCEPService TempByCEPService) http.Handler
 			return
 		}
 
-		//if err := validate(request.CEP); err != nil {
-		//	http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
-		//	return
-		//}
+		if err := validate(request.CEP); err != nil {
+			http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
+			return
+		}
 
 		log.Println("request handling cep:", request.CEP)
 
