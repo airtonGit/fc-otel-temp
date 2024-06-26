@@ -20,7 +20,7 @@ type TempByCEPResponse struct {
 	TempF      float64 `json:"temp_F,omitempty"`
 	TempK      float64 `json:"temp_K,omitempty"`
 	Localidade string  `json:"localidade"`
-	StatusCode int
+	StatusCode int     `json:"-"`
 }
 
 type TempByCEPClient interface {
@@ -54,6 +54,8 @@ func (c *tempByCEPClient) DoRequest(ctx context.Context, cep string) (TempByCEPR
 	if err != nil {
 		return TempByCEPResponse{}, fmt.Errorf("fail request err=%w", err)
 	}
+
+	log.Println("service-b resp status", resp.Status)
 
 	if resp.StatusCode > 201 {
 		body, err := io.ReadAll(resp.Body)

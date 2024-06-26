@@ -46,9 +46,9 @@ services:
 
   service-b:
     container_name: service-b
-    #image: ghcr.io/airtongit/fc-temp-by-cep:latest
+    image: ghcr.io/airtongit/fc-temp-by-cep:latest
     build:
-      context: .
+      context: ../fc-temp-by-cep/
       dockerfile: ../fc-temp-by-cep/Dockerfile
     depends_on:
       - otel-collector

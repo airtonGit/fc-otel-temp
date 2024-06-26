@@ -115,19 +115,20 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Listening, READY"))
+		w.Write([]byte("service-a listening, READY"))
+		return
 	})
 	r.Post("/cep", domain.MakeRequestTempByCEPHandler(tempByCEPService))
 
 	// Determine port for HTTP service.
-	port := viper.GetString("PORT") //os.Getenv("PORT")
+	port := viper.GetString("PORT")
 	if port == "" {
 		port = "8080"
 		log.Printf("defaulting to port %s", port)
 	}
 
 	// Start HTTP server.
-	log.Printf("listening on port %s", port)
+	log.Printf("service-a listening on port %s", port)
 	if err := http.ListenAndServe(":"+port, r); err != nil {
 		log.Fatal(err)
 	}
